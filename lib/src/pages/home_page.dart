@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:qr_scanner_app/src/pages/directions_page.dart';
+import 'package:qr_scanner_app/src/pages/maps_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Home Page'),
-      ),
+      body: _callPage(0),
       bottomNavigationBar: _createBottomNavigationBar()
     );
+  }
+
+  Widget _callPage( int currentPage ){
+    switch( currentPage ) {
+      case 0: return MapsPage();
+      case 1: return DirectionsPage();
+
+      default:
+        return MapsPage();
+    }
   }
 
   Widget _createBottomNavigationBar() {
