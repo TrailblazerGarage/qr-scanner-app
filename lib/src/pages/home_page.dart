@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:qr_scanner_app/src/pages/directions_page.dart';
 import 'package:qr_scanner_app/src/pages/maps_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+  class _HomePageState extends State<HomePage>{
+
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _callPage(0),
+      body: _callPage(currentIndex),
       bottomNavigationBar: _createBottomNavigationBar()
     );
   }
@@ -24,8 +33,12 @@ class HomePage extends StatelessWidget {
   Widget _createBottomNavigationBar() {
 
     return BottomNavigationBar(
-      currentIndex: 0,
-      onTap: (index) {},
+      currentIndex: currentIndex,
+      onTap: (index) {
+        setState(() {
+          currentIndex = index;
+        });
+      },
       items: [
         BottomNavigationBarItem(
           icon: Icon( Icons.map ),
