@@ -3,6 +3,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 
 import 'package:qr_scanner_app/src/pages/directions_page.dart';
 import 'package:qr_scanner_app/src/pages/maps_page.dart';
+import 'package:qr_scanner_app/src/providers/db_provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -40,21 +41,23 @@ class HomePage extends StatefulWidget {
 
   _scanQR() async {
 
-    // TODO Scan URL FutureString String: http://9dappsqa-env.eba-qr3rivfk.us-east-2.elasticbeanstalk.com/
-    // TODO Scan Google Maps Future String: geo:40.78742919553978,-73.96268263300784
+    // TODO Test ScanModel with Google Maps Future String: geo:40.78742919553978,-73.96268263300784
 
-    dynamic futureString = '';
+    dynamic futureString = 'http://9dappsqa-env.eba-qr3rivfk.us-east-2.elasticbeanstalk.com/';
 
+
+    /**
+     TODO
     try{
       futureString = await BarcodeScanner.scan();
     }catch(e) {
       futureString = e.toString();
     }
-
-    print('Future String: ${futureString.rawContent}');
+    */
 
     if( futureString != null ){
-      print('QR Data obtained');
+      final scan = ScanModel( content: futureString);
+      DBProvider.db.newScan(scan);
     }
   }
 
