@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+
 import 'package:qr_scanner_app/src/pages/directions_page.dart';
 import 'package:qr_scanner_app/src/pages/maps_page.dart';
+
 
 class HomePage extends StatefulWidget {
 
@@ -29,10 +32,30 @@ class HomePage extends StatefulWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon( Icons.filter_center_focus ),
-        onPressed: () {},
+        onPressed: _scanQR,
         backgroundColor: Theme.of(context).primaryColor,
       ),
     );
+  }
+
+  _scanQR() async {
+
+    // TODO Scan URL FutureString String: http://9dappsqa-env.eba-qr3rivfk.us-east-2.elasticbeanstalk.com/
+    // TODO Scan Google Maps Future String: geo:40.78742919553978,-73.96268263300784
+
+    dynamic futureString = '';
+
+    try{
+      futureString = await BarcodeScanner.scan();
+    }catch(e) {
+      futureString = e.toString();
+    }
+
+    print('Future String: ${futureString.rawContent}');
+
+    if( futureString != null ){
+      print('QR Data obtained');
+    }
   }
 
   Widget _callPage( int currentPage ){
