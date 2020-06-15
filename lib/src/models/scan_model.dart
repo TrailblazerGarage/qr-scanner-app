@@ -4,7 +4,7 @@ class ScanModel {
 
   int id;
   String type;
-  String content;
+  dynamic content;
 
   ScanModel({
     this.id,

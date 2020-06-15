@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:barcode_scan/barcode_scan.dart';
@@ -6,7 +7,7 @@ import 'package:qr_scanner_app/src/models/scan_model.dart';
 
 import 'package:qr_scanner_app/src/pages/directions_page.dart';
 import 'package:qr_scanner_app/src/pages/maps_page.dart';
-
+import 'package:qr_scanner_app/src/utils/utils.dart' as utils;
 
 class HomePage extends StatefulWidget {
 
@@ -44,26 +45,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   _scanQR() async {
+    dynamic futureString;
 
-    /// TODO remove hardcode value
-    dynamic futureString = 'http://9dappsqa-env.eba-qr3rivfk.us-east-2.elasticbeanstalk.com/';
-
-    /**
-     TODO BarcodeScanner Kotlin plugin enables camera/qr scan features
     try{
       futureString = await BarcodeScanner.scan();
     }catch(e) {
       futureString = e.toString();
     }
-    */
 
-    if( futureString != null ) {
-      final scan = ScanModel(content: futureString);
+    if( futureString.rawContent != null ) {
+      final scan = ScanModel(content: futureString.rawContent);
       scansBloc.addScan(scan);
 
-      final scan2 = ScanModel(
-          content: 'geo:40.78742919553978,-73.96268263300784');
-      scansBloc.addScan(scan2);
+      /// Delay necessary on iOS devices
+      if(Platform.isIOS){
+        Future.delayed( Duration( milliseconds: 750), (){
+          utils.launchURL(context, scan);
+        });
+      }else {
+        utils.launchURL(context, scan);
+      }
     }
   }
 
@@ -97,6 +98,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
-
   }
 }
