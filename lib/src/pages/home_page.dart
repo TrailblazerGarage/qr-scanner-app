@@ -10,13 +10,11 @@ import 'package:qr_scanner_app/src/pages/maps_page.dart';
 import 'package:qr_scanner_app/src/utils/utils.dart' as utils;
 
 class HomePage extends StatefulWidget {
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   final scansBloc = new ScansBloc();
 
   int currentIndex = 0;
@@ -24,20 +22,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('QR Scanner'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon( Icons.delete_forever ),
-            onPressed: scansBloc.removeScanAll,
-          )
-        ]
-      ),
+      appBar: AppBar(title: Text('QR Scanner'), actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.delete_forever),
+          onPressed: scansBloc.removeScanAll,
+        )
+      ]),
       body: _callPage(currentIndex),
       bottomNavigationBar: _createBottomNavigationBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: Icon( Icons.filter_center_focus ),
+        child: Icon(Icons.filter_center_focus),
         onPressed: _scanQR,
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -47,31 +42,37 @@ class _HomePageState extends State<HomePage> {
   _scanQR() async {
     dynamic futureString;
 
-    try{
+    /// For local troubleshooting/development
+    /// comment the try/catch block and uncomment one of the lines
+    /// dynamic futureString = 'http://9dappsqa-env.eba-qr3rivfk.us-east-2.elasticbeanstalk.com/';
+    /// dynamic futureString = 'geo:40.78742919553978,-73.96268263300784');
+    try {
       futureString = await BarcodeScanner.scan();
-    }catch(e) {
+    } catch (e) {
       futureString = e.toString();
     }
 
-    if( futureString.rawContent != null ) {
+    if (futureString.rawContent != null) {
       final scan = ScanModel(content: futureString.rawContent);
       scansBloc.addScan(scan);
 
       /// Delay necessary on iOS devices
-      if(Platform.isIOS){
-        Future.delayed( Duration( milliseconds: 750), (){
+      if (Platform.isIOS) {
+        Future.delayed(Duration(milliseconds: 750), () {
           utils.launchURL(context, scan);
         });
-      }else {
+      } else {
         utils.launchURL(context, scan);
       }
     }
   }
 
-  Widget _callPage( int currentPage ){
-    switch( currentPage ) {
-      case 0: return MapsPage();
-      case 1: return DirectionsPage();
+  Widget _callPage(int currentPage) {
+    switch (currentPage) {
+      case 0:
+        return MapsPage();
+      case 1:
+        return DirectionsPage();
 
       default:
         return MapsPage();
@@ -79,7 +80,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _createBottomNavigationBar() {
-
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
@@ -88,14 +88,9 @@ class _HomePageState extends State<HomePage> {
         });
       },
       items: [
+        BottomNavigationBarItem(icon: Icon(Icons.map), title: Text('Mapas')),
         BottomNavigationBarItem(
-          icon: Icon( Icons.map ),
-          title: Text('Mapas')
-        ),
-        BottomNavigationBarItem(
-            icon: Icon( Icons.brightness_5 ),
-            title: Text('Direcciones')
-        ),
+            icon: Icon(Icons.brightness_5), title: Text('Direcciones')),
       ],
     );
   }

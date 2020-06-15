@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:qr_scanner_app/src/bloc/validator.dart';
 import 'package:qr_scanner_app/src/providers/db_provider.dart';
 
-class ScansBloc with Validators{
-
+class ScansBloc with Validators {
   static final ScansBloc _singleton = new ScansBloc._internal();
 
   factory ScansBloc() {
@@ -17,24 +16,26 @@ class ScansBloc with Validators{
 
   final _scansStreamController = StreamController<List<ScanModel>>.broadcast();
 
-  Stream<List<ScanModel>> get scansStream     => _scansStreamController.stream.transform(validateGeo);
-  Stream<List<ScanModel>> get scansStreamHttp => _scansStreamController.stream.transform(validateHttp);
+  Stream<List<ScanModel>> get scansStream =>
+      _scansStreamController.stream.transform(validateGeo);
+  Stream<List<ScanModel>> get scansStreamHttp =>
+      _scansStreamController.stream.transform(validateHttp);
 
-  dispose(){
+  dispose() {
     // ?. ensure that object is not null before call close()
     _scansStreamController?.close();
   }
 
   obtainScans() async {
-    _scansStreamController.sink.add( await DBProvider.db.getAllScans() );
+    _scansStreamController.sink.add(await DBProvider.db.getAllScans());
   }
 
-  addScan( ScanModel scan ) async {
+  addScan(ScanModel scan) async {
     await DBProvider.db.newScan(scan);
     obtainScans();
   }
 
-  removeScan( int id ) async {
+  removeScan(int id) async {
     await DBProvider.db.deleteScan(id);
     obtainScans();
   }
