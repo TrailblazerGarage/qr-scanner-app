@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qr_scanner_app/src/bloc/scans_bloc.dart';
+import 'package:qr_scanner_app/src/models/scan_model.dart';
 
 import 'package:qr_scanner_app/src/pages/directions_page.dart';
 import 'package:qr_scanner_app/src/pages/maps_page.dart';
-import 'package:qr_scanner_app/src/providers/db_provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -12,7 +14,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-  class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
+
+  final scansBloc = new ScansBloc();
 
   int currentIndex = 0;
 
@@ -24,7 +28,7 @@ class HomePage extends StatefulWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon( Icons.delete_forever ),
-            onPressed: (){},
+            onPressed: scansBloc.removeScanAll,
           )
         ]
       ),
@@ -41,13 +45,11 @@ class HomePage extends StatefulWidget {
 
   _scanQR() async {
 
-    // TODO Test ScanModel with Google Maps Future String: geo:40.78742919553978,-73.96268263300784
-
+    /// TODO remove hardcode value
     dynamic futureString = 'http://9dappsqa-env.eba-qr3rivfk.us-east-2.elasticbeanstalk.com/';
 
-
     /**
-     TODO
+     TODO BarcodeScanner Kotlin plugin enables camera/qr scan features
     try{
       futureString = await BarcodeScanner.scan();
     }catch(e) {
@@ -57,7 +59,10 @@ class HomePage extends StatefulWidget {
 
     if( futureString != null ){
       final scan = ScanModel( content: futureString);
-      DBProvider.db.newScan(scan);
+      scansBloc.addScan(scan);
+      
+      final scan2 = ScanModel( content: 'geo:40.78742919553978,-73.96268263300784');
+      scansBloc.addScan(scan2);
     }
   }
 
