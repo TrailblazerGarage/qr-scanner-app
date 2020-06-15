@@ -9,11 +9,13 @@ class MapsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    scansBloc.obtainScans();
+
     return StreamBuilder<List<ScanModel>>(
       stream: scansBloc.scansStream,
       builder: (BuildContext context, AsyncSnapshot<List<ScanModel>> snapshot) {
 
-        /// TODO Bug when changing Directions to Map page AsyncSnapshot State is always ConnectionState.waiting
         if ( snapshot.connectionState == ConnectionState.waiting ) {
           return Center(child: CircularProgressIndicator());
         }
