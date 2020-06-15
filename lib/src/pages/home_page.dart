@@ -57,11 +57,12 @@ class _HomePageState extends State<HomePage> {
     }
     */
 
-    if( futureString != null ){
-      final scan = ScanModel( content: futureString);
+    if( futureString != null ) {
+      final scan = ScanModel(content: futureString);
       scansBloc.addScan(scan);
-      
-      final scan2 = ScanModel( content: 'geo:40.78742919553978,-73.96268263300784');
+
+      final scan2 = ScanModel(
+          content: 'geo:40.78742919553978,-73.96268263300784');
       scansBloc.addScan(scan2);
     }
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qr_scanner_app/src/bloc/scans_bloc.dart';
 import 'package:qr_scanner_app/src/models/scan_model.dart';
+import 'package:qr_scanner_app/src/utils/utils.dart' as utils;
 
 class MapsPage extends StatelessWidget {
-
 
   final scansBloc = new ScansBloc();
 
@@ -13,7 +13,8 @@ class MapsPage extends StatelessWidget {
       stream: scansBloc.scansStream,
       builder: (BuildContext context, AsyncSnapshot<List<ScanModel>> snapshot) {
 
-        if ( !snapshot.hasData ) {
+        /// TODO Bug when changing Directions to Map page AsyncSnapshot State is always ConnectionState.waiting
+        if ( snapshot.connectionState == ConnectionState.waiting ) {
           return Center(child: CircularProgressIndicator());
         }
 
@@ -34,6 +35,7 @@ class MapsPage extends StatelessWidget {
             child: ListTile(
                 leading: Icon( Icons.cloud_queue, color: Theme.of(context).primaryColor),
                 title: Text( scans[i].content ),
+                onTap: () => utils.launchURL(context, scans[i]),
                 subtitle: Text('ID: ${ scans[i].id }'),
                 trailing: Icon( Icons.keyboard_arrow_right, color: Colors.grey)
             ),
