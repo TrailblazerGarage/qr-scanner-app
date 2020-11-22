@@ -9,6 +9,7 @@ This App uses [QR Barcode Scanner](https://github.com/dm77/barcodescanner), MapB
 #### Run the Applicaion
 
 ```
+Open Emulator or connect your device
 flutter devices (Check that Device Emulator is running)
 flutter run (to run the application)
 ```
